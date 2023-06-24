@@ -12,16 +12,11 @@ class StudentUserRegistrationGenericAPIView(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message" : "User Registered"}, status=status.HTTP_200_OK)
-        else:
+
+        if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
+        serializer.save()
+        return Response({"message" : "User Registered"}, status=status.HTTP_200_OK)
 """
 
 Authentication and Authorization 
@@ -37,36 +32,7 @@ token
 Authorization 
 is_user_active
 Permissions 
-
-
 """
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 data = {
     "name" : "First API",
     "format" : "Json",
@@ -76,16 +42,8 @@ data = {
 
 # Create your views here.
 def dummy_api(request):
-    if request.method == "POST":
-        pass
-    elif request.method == "PUT":
-        pass 
-    elif request.method == "DELETE":
-        pass 
-    else:
+    if request.method not in ["POST", "PUT", "DELETE"]:
         return JsonResponse(data)
-
-
 
 class DummyRestAPIView(views.APIView):
     # Read
